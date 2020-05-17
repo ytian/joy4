@@ -14,11 +14,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nareix/joy4/av"
-	"github.com/nareix/joy4/av/avutil"
-	"github.com/nareix/joy4/format/flv"
-	"github.com/nareix/joy4/format/flv/flvio"
-	"github.com/nareix/joy4/utils/bits/pio"
+	"github.com/ytian/joy4/av"
+	"github.com/ytian/joy4/av/avutil"
+	"github.com/ytian/joy4/format/flv"
+	"github.com/ytian/joy4/format/flv/flvio"
+	"github.com/ytian/joy4/utils/bits/pio"
 )
 
 var Debug bool
