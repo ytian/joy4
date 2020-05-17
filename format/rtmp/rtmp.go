@@ -8,16 +8,17 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/nareix/joy4/utils/bits/pio"
-	"github.com/nareix/joy4/av"
-	"github.com/nareix/joy4/av/avutil"
-	"github.com/nareix/joy4/format/flv"
-	"github.com/nareix/joy4/format/flv/flvio"
 	"io"
 	"net"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/nareix/joy4/av"
+	"github.com/nareix/joy4/av/avutil"
+	"github.com/nareix/joy4/format/flv"
+	"github.com/nareix/joy4/format/flv/flvio"
+	"github.com/nareix/joy4/utils/bits/pio"
 )
 
 var Debug bool
@@ -244,6 +245,7 @@ const (
 	msgtypeidDataMsgAMF3      = 15
 	msgtypeidVideoMsg         = 9
 	msgtypeidAudioMsg         = 8
+	msgTimeout                = 3
 )
 
 const (
@@ -297,6 +299,8 @@ func (self *Conn) pollMsg() (err error) {
 	self.gotcommand = false
 	self.datamsgvals = nil
 	self.avtag = flvio.Tag{}
+	self.netconn.SetReadDeadline(time.Now().Add(time.Second * msgTimeout))
+	defer self.netconn.SetReadDeadline(time.Time{})
 	for {
 		if err = self.readChunk(); err != nil {
 			return
