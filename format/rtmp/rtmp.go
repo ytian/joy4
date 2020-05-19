@@ -357,7 +357,11 @@ var CodecTypes = flv.CodecTypes
 
 func (self *Conn) writeBasicConf() (err error) {
 	// > SetChunkSize
-	if err = self.writeSetChunkSize(1024 * 1024 * 128); err != nil {
+	// if err = self.writeSetChunkSize(1024 * 1024 * 128); err != nil {
+	// 	return
+	// }
+	// new version nginx rtmp has 10m chunk size limit, so change it to 10m
+	if err = self.writeSetChunkSize(1024 * 1024 * 10); err != nil {
 		return
 	}
 	// > WindowAckSize
