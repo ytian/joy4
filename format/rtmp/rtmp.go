@@ -180,8 +180,7 @@ type Conn struct {
 	datamsgvals []interface{}
 	avtag       flvio.Tag
 
-	eventtype  uint16
-	msgTimeout int
+	eventtype uint16
 }
 
 type txrxcount struct {
@@ -214,7 +213,6 @@ func NewConn(netconn net.Conn) *Conn {
 	conn.txrxcount = &txrxcount{ReadWriter: netconn}
 	conn.writebuf = make([]byte, 4096)
 	conn.readbuf = make([]byte, 4096)
-	conn.msgTimeout = 3 //默认3秒
 	return conn
 }
 
@@ -247,6 +245,7 @@ const (
 	msgtypeidDataMsgAMF3      = 15
 	msgtypeidVideoMsg         = 9
 	msgtypeidAudioMsg         = 8
+	msgTimeout                = 10
 )
 
 const (
@@ -257,10 +256,6 @@ const (
 
 func (self *Conn) NetConn() net.Conn {
 	return self.netconn
-}
-
-func (self *Conn) SetMsgTimeout(timeout int) {
-	self.msgTimeout = timeout
 }
 
 func (self *Conn) TxBytes() uint64 {
@@ -304,7 +299,7 @@ func (self *Conn) pollMsg() (err error) {
 	self.gotcommand = false
 	self.datamsgvals = nil
 	self.avtag = flvio.Tag{}
-	self.netconn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(self.msgTimeout)))
+	self.netconn.SetReadDeadline(time.Now().Add(time.Second * msgTimeout))
 	defer self.netconn.SetReadDeadline(time.Time{})
 	for {
 		if err = self.readChunk(); err != nil {
