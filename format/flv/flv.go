@@ -15,7 +15,7 @@ import (
 	"github.com/ytian/joy4/utils/bits/pio"
 )
 
-var MaxProbePacketCount = 1000
+var MaxProbePacketCount = 200
 
 func NewMetadataByStreams(streams []av.CodecData) (metadata flvio.AMFMap, err error) {
 	metadata = flvio.AMFMap{}
